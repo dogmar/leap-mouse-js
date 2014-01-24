@@ -16,7 +16,7 @@ body {
 
 .cursor:before {
   display: block;
-  position: absolute;
+  position: fixed;
   content: '';
   width: 0;
   height: 0;

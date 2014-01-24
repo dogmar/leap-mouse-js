@@ -12,7 +12,7 @@
 		clickHoldTime: 1000,
 		enableGestures: true,
 		leapLib: Leap,
-		leapBounds: {top: 200, left: -150, bottom: 30, right: 150, back: -70, front: 50},
+		leapBounds: {top: 200, left: -150, bottom: 30, right: 150, back: -150, front: 150},
 		screenBounds: null,
 		pointerElt: null,
 		cursorHtml: '<div class="cursor"></div>',
@@ -22,16 +22,16 @@
 	var s,
 		leap,
 		screenBounds,
-		scrPos = {},
-		lPos = {},
-		lRot = {},
+		scrPos = {x:null,y:null},
+		lPos = {x:null,y:null,z:null},
+		lRot = {x:null,y:null,z:null},
 		$,
 		$cursor,
 		lastCursorTarget,
 		paused;
 
 	var init = function init( options ) {
-		
+		console.log('init');
 
 		if (options && options.$) {
 			$ = options.$;
@@ -44,7 +44,7 @@
 		s = $.extend({}, defaults, options);
 
 		$( document ).ready( function() {
-			
+			console.log('document ready');
 			$cursor = $(s.cursorHtml);
 			$( 'body' ).append($cursor);
 			leap = new s.leapLib.Controller({enableGestures: s.enableGestures});
@@ -57,6 +57,14 @@
 			});
 		});
 	};
+
+	var getLeapPos = function() {
+		return $.extend({}, lPos);
+	}
+
+	var getScreenPos = function() {
+		return $.extend({}, scrPos);
+	}
 
 	var setScreenBounds = function setScreenBounds( bounds ) {
 		var $w;
@@ -95,7 +103,7 @@
 			for (i = 0, len = frame.gestures.length; i < len; ++i) {
 				g = frame.gestures[i];
 				if (g.type === 'screenTap' && pointable) {
-					
+					console.log('screen tap');
 					var tapPos = leapToScreen(g.position[0], g.position[1]);
 					simulateClick(tapPos.x, tapPos.y);
 				}
@@ -109,7 +117,6 @@
 			$cursor.css('top', y);
 			$cursor.css('left', x);
 		} else {
-			
 			$cursor.hide();
 		}
 	};
@@ -131,7 +138,9 @@
 	var simulateClick = function simulateClick( x, y ) {
 		var relX, relY, offset, target;
 		
-		target = document.elementFromPoint(x, y) || document;
+		$cursor.css('display', 'none');
+		target = eltFromPt(x, y);
+		$cursor.show('display', 'block');
 		if (target) {
 			var evt = document.createEvent('MouseEvents');
 			relX = 0;
@@ -146,8 +155,22 @@
 		}
 	};
 
+	var eltFromPt = function eltFromPt(x, y) {
+		var target;
+		$cursor.hide();
+		target = document.elementFromPoint(x, y);
+		$cursor.show();
+		return (target ? target : document);
+	}
+
 	var simulateMouseMove = function simulateMouseMove( x, y ) {
-		var relX, relY, outRelX, outRelY, offset, target = document.elementFromPoint(x, y);
+		var relX, 
+			relY, 
+			outRelX, 
+			outRelY, 
+			offset, 
+			target;
+			target = eltFromPt(x, y);
 		if (target) {
 			var evt = document.createEvent('MouseEvents');
 			relX = 0;
@@ -160,7 +183,7 @@
 			evt.initMouseEvent('mousemove', true, true, window, 1, 0, 0, relX, relY, false, false, false, false, 0, null);
 			target.dispatchEvent(evt);
 			if (target !== lastCursorTarget) {
-				
+				console.log('over:', target);
 				// mouseout
 				offset = $(lastCursorTarget).offset();
 				if (offset) {
@@ -213,7 +236,9 @@
 	var leapMouse = {
 		defaults: defaults,
 		init: init,
-		setScreenBounds: setScreenBounds
+		setScreenBounds: setScreenBounds,
+		getScreenPos: getScreenPos,
+		getLeapPos: getLeapPos
 	};
 
 	window.leapMouse = leapMouse;
