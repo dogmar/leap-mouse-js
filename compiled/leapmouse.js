@@ -31,7 +31,7 @@
 		paused;
 
 	var init = function init( options ) {
-		console.log('init');
+		
 
 		if (options && options.$) {
 			$ = options.$;
@@ -44,7 +44,7 @@
 		s = $.extend({}, defaults, options);
 
 		$( document ).ready( function() {
-			console.log('document ready');
+			
 			$cursor = $(s.cursorHtml);
 			$( 'body' ).append($cursor);
 			leap = new s.leapLib.Controller({enableGestures: s.enableGestures});
@@ -95,7 +95,7 @@
 			for (i = 0, len = frame.gestures.length; i < len; ++i) {
 				g = frame.gestures[i];
 				if (g.type === 'screenTap' && pointable) {
-					console.log('screen tap');
+					
 					var tapPos = leapToScreen(g.position[0], g.position[1]);
 					simulateClick(tapPos.x, tapPos.y);
 				}
@@ -109,7 +109,7 @@
 			$cursor.css('top', y);
 			$cursor.css('left', x);
 		} else {
-			console.log('out of bounds', lPos);
+			
 			$cursor.hide();
 		}
 	};
@@ -160,7 +160,7 @@
 			evt.initMouseEvent('mousemove', true, true, window, 1, 0, 0, relX, relY, false, false, false, false, 0, null);
 			target.dispatchEvent(evt);
 			if (target !== lastCursorTarget) {
-				console.log('over:', target);
+				
 				// mouseout
 				offset = $(lastCursorTarget).offset();
 				if (offset) {

@@ -1,0 +1,17 @@
+body
+	background-color: white
+.cursor
+	position: fixed
+	font-size: 32px
+	overflow: visible
+	&:before
+		display: block
+		position: absolute
+		content: ''
+		width: 0
+		height: 0
+		border-left: 1em solid transparent
+		border-right: 1em solid transparent
+		border-bottom: 1em solid black
+	transform-origin: 50% 0
+	transform: translateX(-50%) scaleX(.3)

@@ -1,4 +1,8 @@
 {
+	"bitwise": true,
+	"browser": true,
+	"devel": true,
+	"camelcase": true,
 	"curly": true,
 	"eqeqeq": true,
 	"eqnull": true,
@@ -6,6 +10,7 @@
 	"forin": true,
 	"immed": true,
 	"indent": 2,
+	"jquery": true,
 	"latedef": "nofunc",
 	"newcap": true,
 	"noarg": true,
@@ -14,6 +19,5 @@
 	"trailing": true,
 	"undef": true,
 	"unused": true,
-
-	"node": false
+	"node": true
 }
